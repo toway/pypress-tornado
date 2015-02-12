@@ -11,26 +11,26 @@
 
 import os
 import random
-import Image, ImageFont, ImageDraw, ImageEnhance
+from PIL import Image, ImageFont, ImageDraw, ImageEnhance
 import StringIO
 
 def Recaptcha(text):
     img = Image.new('RGB',size=(110,26),color=(255,255,255))
-    
+
     # set font
     font = ImageFont.truetype(os.path.join(os.path.dirname(__file__),'FacesAndCaps.ttf'),25)
     draw = ImageDraw.Draw(img)
     colors = [(250,125,30),(15,65,150),(210,30,90),(64,25,90),(10,120,40),(95,0,16)]
-    
+
     # write text
     for i,s in enumerate(text):
         position = (i*25+4,0)
         draw.text(position, s, fill=random.choice(colors),font=font)
-    
+
     # set border
     #draw.line([(0,0),(99,0),(99,29),(0,29),(0,0)], fill=(180,180,180))
     del draw
-    
+
     # push data
     strIO = StringIO.StringIO()
     img.save(strIO,'PNG')
@@ -64,7 +64,7 @@ class Thumbnail(object):
 
     def thumb(self, size=(100,100), outfile=None, filler=False, watermark=None):
         """
-            outfile: 'file/to/outfile.xxx'  
+            outfile: 'file/to/outfile.xxx'
             filler: True|False
             watermark: 'file/to/watermark.xxx'
         """
@@ -78,10 +78,10 @@ class Thumbnail(object):
         #原图复制
         part = self.img
         part.thumbnail(size, Image.ANTIALIAS) # 按比例缩略
-        
+
         size = size if filler else part.size # 不补白则正常缩放
         w,h = size
-        
+
         layer = Image.new('RGBA',size,(255,255,255)) # 白色底图
 
         # 计算粘贴的位置
@@ -105,7 +105,7 @@ class Thumbnail(object):
 
         layer.save(outfile, quality=100) # 保存
         return outfile
-    
+
 
 if __name__=='__main__':
     t = Thumbnail('pic.jpg')
